@@ -9,6 +9,7 @@ pipeline {
         stage("build"){
 
             steps {
+                echo "Hello World"
                 echo "Building the Application"
             }
 
