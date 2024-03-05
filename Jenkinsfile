@@ -3,7 +3,7 @@ pipeline {
 // This build will be runned in any available Jenkins agent
     agent any
 
-    steges{
+    stages {
 
 
         stage("build"){
