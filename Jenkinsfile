@@ -12,6 +12,11 @@ pipeline {
         maven "my-Maven.3"
     }
 
+    parameters {
+        string(name: "ENVIRONMENT", defaultValue: "dev", description: "Environment to deploy to")
+        booleanParam(name: "EXECUTE_TEST", defaultValue: true, description: "Do you want to test this Build?")
+        choise(name: "TARGET_PLATFORM", choices ["AWS","Azure","GCP"], description: "Target Platform for deployment")
+    }
 
     // In "environment" we can define our enviroment variables and will be available in all stages.
     // The default Jenkins environment variables are in http://Your-Jenkins-URL/env-vars.html/
@@ -41,7 +46,7 @@ pipeline {
             when {
                 
                 expression {
-                    BRANCH_NAME == "main" || BRANCH_NAME == "dev"
+                    params.EXECUTE_TEST == true
                 }
             }
             steps {
@@ -56,11 +61,13 @@ pipeline {
  
                 echo "Deploying the Application."
                 withCredentials([
-                    usernamePassword(credentialsId: "my-credential-id", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")
+                    usernamePassword(credentialsId: "my_test_credential", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")
                 ]){
                     sh 'echo "Username: $USERNAME"'
                     sh 'echo "Password: $PASSWORD"'
                 }
+
+                echo "Our deploying target platform is: ${TARGET_PLATFORM}"
 
                 // sh "echo ${MY_SERVER_CREDENTIALS}"
             }
