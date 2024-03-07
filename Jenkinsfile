@@ -1,5 +1,8 @@
 // => For using credentials in Jenkinsfile, you need to install "Credentials Bindung" Plugin
 
+def myvar
+
+
 pipeline {
 
     // This build will be runned in any available Jenkins agent
@@ -7,12 +10,14 @@ pipeline {
 
     // "tools "is used to define tools installations required for the pipeline job. 
     // It ensures that the necessary tools are available on the Jenkins agent where the pipeline runs.
-    
     // tools {
     //     // The name "my-Maven.3" come from the name configured in the Jenkins Global Tool Configuration.
     //     maven "my-Maven.3"
     // }
 
+    // The "parameters" block allows us to define input parameters for our Jenkins Pipeline job.
+    // These parameters can be specified when triggering the pipeline manually, allowing users to customize the behavior of the pipeline execution.
+    // We can access these parameters using the "params" object within "stages" block. 
     parameters {
         string(name: "ENVIRONMENT", defaultValue: "dev", description: "Environment to deploy to")
         booleanParam(name: "EXECUTE_TEST", defaultValue: true, description: "Do you want to test this Build?")
@@ -28,6 +33,16 @@ pipeline {
 
     stages {
 
+        stage("init"){
+            steps {
+                // The "script" block is used to execute arbitrary Groovy code within the context of the pipeline.
+                script {
+                    // We loaded a script file within Pipeline.
+                    myvar = load "script.groovy"
+                }
+            }
+        }
+
         stage("build"){
             when {
                 // In "expression" we can write Groovy expression
@@ -36,6 +51,11 @@ pipeline {
                 }
             }
             steps {
+
+                script {
+                    myvar.buildApp()
+                }
+
                 echo "Building Version is ${NEW_VERSION}"
             }
 
@@ -50,6 +70,10 @@ pipeline {
                 }
             }
             steps {
+                script {
+                    myvar.testApp()
+                }
+
                 echo "Testing the Application"
             }
 
@@ -58,7 +82,7 @@ pipeline {
         stage("deploy"){
 
             steps {
- 
+                                
                 echo "Deploying the Application."
 
                 withCredentials([usernamePassword(credentialsId: "my_test_credential", passwordVariable: "PASSWORD", usernameVariable: "USERNAME")]){
@@ -66,7 +90,12 @@ pipeline {
                     sh 'echo "Password: $PASSWORD"'
                 }
 
+                 
                 script {
+
+                    myvar.deployApp()
+
+                    // These variables come form "parameters" block.
                     echo "We doploy to ${params.ENVIRONMENT}"
                     echo "Testing the build: ${params.EXECUTE_TEST}"
                     echo "Our deploying target platform is: ${params.TARGET_PLATFORM}"
