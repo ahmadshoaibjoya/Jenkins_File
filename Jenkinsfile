@@ -15,7 +15,7 @@ pipeline {
     parameters {
         string(name: "ENVIRONMENT", defaultValue: "dev", description: "Environment to deploy to")
         booleanParam(name: "EXECUTE_TEST", defaultValue: true, description: "Do you want to test this Build?")
-        choise(name: "TARGET_PLATFORM", choices ["AWS","Azure","GCP"], description: "Target Platform for deployment")
+        choice(name: "TARGET_PLATFORM", choices ["AWS","Azure","GCP"], description: "Target Platform for deployment")
     }
 
     // In "environment" we can define our enviroment variables and will be available in all stages.
@@ -82,15 +82,15 @@ pipeline {
 
 // "always" is a condition. Tt will be always executed whether the Build failed or successed.
         always {
-
+            echo "Building Application finished."
         }
 //  "success" is a condition. It will be executed when the Build successfully executed.
         success {
-
+            echo "Application successfully builded!"
         }
 // "failure" is condition. It will be executed when the Build unsuccessfully executed.
         failure {
-
+            echo the "The build process failed!"
         }
 
     }
