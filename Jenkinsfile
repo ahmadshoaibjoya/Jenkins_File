@@ -21,7 +21,7 @@ pipeline {
     // In "environment" we can define our enviroment variables and will be available in all stages.
     // The default Jenkins environment variables are in http://Your-Jenkins-URL/env-vars.html/
     environment {
-        MYCODE_CHANGES = getGitChanges()
+        // MYCODE_CHANGES = getGitChanges()
         // MY_SERVER_CREDENTIALS = credentials("my-credential-id")
         NEW_VERSION = "1.3.0"
     }
