@@ -29,12 +29,12 @@ pipeline {
     stages {
 
         stage("build"){
-            when {
-                // In "expression" we can write Groovy expression
-                expression {
-                    BRANCH_NAME == "main" && MYCODE_CHANGES == true
-                }
-            }
+            // when {
+            //     // In "expression" we can write Groovy expression
+            //     expression {
+            //         BRANCH_NAME == "main" && MYCODE_CHANGES == true
+            //     }
+            // }
             steps {
                 echo "Building Version is ${NEW_VERSION}"
             }
