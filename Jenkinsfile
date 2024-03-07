@@ -15,7 +15,7 @@ pipeline {
     parameters {
         string(name: "ENVIRONMENT", defaultValue: "dev", description: "Environment to deploy to")
         booleanParam(name: "EXECUTE_TEST", defaultValue: true, description: "Do you want to test this Build?")
-        choice(name: "TARGET_PLATFORM", choices ["AWS","Azure","GCP"], description: "Target Platform for deployment")
+        choice(name: "TARGET_PLATFORM", choices: ["AWS","Azure","GCP"], description: "Target Platform for deployment")
     }
 
     // In "environment" we can define our enviroment variables and will be available in all stages.
@@ -67,7 +67,12 @@ pipeline {
                     sh 'echo "Password: $PASSWORD"'
                 }
 
-                echo "Our deploying target platform is: ${TARGET_PLATFORM}"
+                script {
+                    echo "We doploy to ${params.ENVIRONMENT}"
+                    echo "Testing the build: ${params.EXECUTE_TEST}"
+                    echo "Our deploying target platform is: ${params.TARGET_PLATFORM}"
+                }
+                
 
                 // sh "echo ${MY_SERVER_CREDENTIALS}"
             }
@@ -90,7 +95,7 @@ pipeline {
         }
 // "failure" is condition. It will be executed when the Build unsuccessfully executed.
         failure {
-            echo the "The build process failed!"
+            echo "The build process failed!"
         }
 
     }
