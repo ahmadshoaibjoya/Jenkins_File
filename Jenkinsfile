@@ -7,10 +7,11 @@ pipeline {
 
     // "tools "is used to define tools installations required for the pipeline job. 
     // It ensures that the necessary tools are available on the Jenkins agent where the pipeline runs.
-    tools {
-        // The name "my-Maven.3" come from the name configured in the Jenkins Global Tool Configuration.
-        // maven "my-Maven.3"
-    }
+    
+    // tools {
+    //     // The name "my-Maven.3" come from the name configured in the Jenkins Global Tool Configuration.
+    //     maven "my-Maven.3"
+    // }
 
     parameters {
         string(name: "ENVIRONMENT", defaultValue: "dev", description: "Environment to deploy to")
