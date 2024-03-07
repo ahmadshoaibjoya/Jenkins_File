@@ -60,12 +60,12 @@ pipeline {
             steps {
  
                 echo "Deploying the Application."
-                withCredentials([
-                    usernamePassword(credentialsId: "my_test_credential", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")
-                ]){
-                    sh 'echo "Username: $USERNAME"'
-                    sh 'echo "Password: $PASSWORD"'
-                }
+                // withCredentials([
+                //     usernamePassword(credentialsId: "my_test_credential", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")
+                // ]){
+                //     sh 'echo "Username: $USERNAME"'
+                //     sh 'echo "Password: $PASSWORD"'
+                // }
 
                 script {
                     echo "We doploy to ${params.ENVIRONMENT}"
