@@ -9,7 +9,7 @@ pipeline {
     // It ensures that the necessary tools are available on the Jenkins agent where the pipeline runs.
     tools {
         // The name "my-Maven.3" come from the name configured in the Jenkins Global Tool Configuration.
-        maven "my-Maven.3"
+        // maven "my-Maven.3"
     }
 
     parameters {
@@ -21,7 +21,6 @@ pipeline {
     // In "environment" we can define our enviroment variables and will be available in all stages.
     // The default Jenkins environment variables are in http://Your-Jenkins-URL/env-vars.html/
     environment {
-        // MYCODE_CHANGES = getGitChanges()
         // MY_SERVER_CREDENTIALS = credentials("my-credential-id")
         NEW_VERSION = "1.3.0"
     }
@@ -29,12 +28,12 @@ pipeline {
     stages {
 
         stage("build"){
-            // when {
-            //     // In "expression" we can write Groovy expression
-            //     expression {
-            //         BRANCH_NAME == "main" && MYCODE_CHANGES == true
-            //     }
-            // }
+            when {
+                // In "expression" we can write Groovy expression
+                expression {
+                    BRANCH_NAME == "main"
+                }
+            }
             steps {
                 echo "Building Version is ${NEW_VERSION}"
             }
@@ -60,12 +59,11 @@ pipeline {
             steps {
  
                 echo "Deploying the Application."
-                // withCredentials([
-                //     usernamePassword(credentialsId: "my_test_credential", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")
-                // ]){
-                //     sh 'echo "Username: $USERNAME"'
-                //     sh 'echo "Password: $PASSWORD"'
-                // }
+
+                withCredentials([usernamePassword(credentialsId: "my_test_credential", passwordVariable: "PASSWORD", usernameVariable: "USERNAME")]){
+                    sh 'echo "Username: $USERNAME"'
+                    sh 'echo "Password: $PASSWORD"'
+                }
 
                 script {
                     echo "We doploy to ${params.ENVIRONMENT}"
